@@ -1,0 +1,12 @@
+working_directory "<%= current_path %>"
+pid "<%= unicorn_pid %>"
+stderr_path "<%= unicorn_log %>"
+stdout_path "<%= unicorn_log %>"
+
+listen "<%= unicorn_sock %>", :backlog => 1024
+worker_processes <%= unicorn_workers %>
+timeout 30
+
+preload_app true
+GC.respond_to?(:copy_on_write_friendly=) and
+  GC.copy_on_write_friendly = true
