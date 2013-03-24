@@ -1,0 +1,1 @@
+after "deploy", "deploy:cleanup"

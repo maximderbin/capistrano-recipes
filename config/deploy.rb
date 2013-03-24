@@ -1,28 +1,27 @@
 require 'bundler/capistrano'
 require 'capistrano_colors'
 
-load 'config/recipes/base'
-load 'config/recipes/nginx'
-load 'config/recipes/nodejs'
-load 'config/recipes/unicorn'
-load 'config/recipes/assets'
-load 'config/recipes/mongodb'
+%w[base nodejs nginx unicorn assets mongodb callbacks].each do |recipe|
+  load "config/recipes/#{recipe}"
+end
 
+# Servers and their roles.
 server "111.111.111.111", :web, :app, :db, primary: true
-
-set :user, "user"
-set :application, "appname"
-set :deploy_to, "/home/#{user}/#{application}"
-set :deploy_via, :remote_cache
-set :use_sudo, false
-
-set :scm, :git
-set :repository,  "git@github.com:user/repository.git"
-set :branch, "master"
-
-default_run_options[:pty] = true
-ssh_options[:forward_agent] = true
-
 set_default(:server_name, 'servername.ru')
 
-after "deploy", "deploy:cleanup"
+# Server-side information.
+set :user,        "user"
+set :application, "appname"
+set :deploy_to,   "/home/#{user}/#{application}"
+set :use_sudo,    false
+
+# Repository (if any) configuration.
+set :scm,         :git
+set :deploy_via,  :remote_cache
+set :repository,  "git@github.com:user/repository.git"
+set :branch,      "master"
+
+# Run on Linux: `$ ssh-add` or on OSX: `$ ssh-add -K` for "forward_agent".
+ssh_options[:forward_agent] = true
+ssh_options[:port]          = 22
+default_run_options[:pty]   = true
