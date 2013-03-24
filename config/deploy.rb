@@ -1,7 +1,7 @@
 require 'bundler/capistrano'
 require 'capistrano_colors'
 
-%w[base nodejs nginx unicorn assets mongodb check callbacks].each do |recipe|
+%w[base nodejs nginx unicorn assets mongodb check log callbacks].each do |recipe|
   load "config/recipes/#{recipe}"
 end
 
