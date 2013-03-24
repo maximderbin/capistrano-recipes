@@ -1,6 +1,5 @@
 require 'bundler/capistrano'
 require 'capistrano_colors'
-#require 'delayed/recipes'
 
 load 'config/recipes/base'
 load 'config/recipes/nginx'
@@ -8,7 +7,6 @@ load 'config/recipes/nodejs'
 load 'config/recipes/unicorn'
 load 'config/recipes/assets'
 load 'config/recipes/mongodb'
-load 'config/recipes/callbacks'
 
 server "111.111.111.111", :web, :app, :db, primary: true
 
