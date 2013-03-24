@@ -4,6 +4,7 @@ require 'capistrano_colors'
 
 load 'config/recipes/base'
 load 'config/recipes/nginx'
+load 'config/recipes/nodejs'
 load 'config/recipes/unicorn'
 load 'config/recipes/assets'
 load 'config/recipes/mongodb'
