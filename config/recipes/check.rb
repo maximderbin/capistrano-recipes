@@ -1,4 +1,7 @@
+# Make sure local git is in sync with remote.
 namespace :check do
+  before "deploy",      "check:revision"
+  before "deploy:cold", "check:revision"
   desc "Make sure local git is in sync with remote."
   task :revision, roles: :web do
     unless `git rev-parse HEAD` == `git rev-parse origin/#{branch}`
@@ -7,6 +10,4 @@ namespace :check do
       exit
     end
   end
-  before "deploy",      "check:revision"
-  before "deploy:cold", "check:revision"
 end

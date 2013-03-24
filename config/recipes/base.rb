@@ -36,14 +36,16 @@ namespace :deploy do
     run "#{sudo} apt-get -y update"
     run "#{sudo} apt-get -y install #{general_packages} #{ruby_dependencies}"
   end
+end
 
+namespace :ruby do
+  after "deploy:install", "ruby:install"
   desc "Download, compile and install ruby and bundler"
-  task :install_ruby do
+  task :install do
     run "wget http://ftp.ruby-lang.org/pub/ruby/1.9/ruby-1.9.3-p385.tar.gz"
     run "tar -xvzf ruby-1.9.3-p385.tar.gz"
     run "cd ruby-1.9.3-p385/ && ./configure && make && #{sudo} make install"
     run "echo 'gem: --no-ri --no-rdoc' >> ~/.gemrc"
     run "#{sudo} gem install bundler"
   end
-  after "deploy:install", "deploy:install_ruby"
 end

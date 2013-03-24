@@ -6,6 +6,7 @@ set_default(:unicorn_log) { "#{shared_path}/log/unicorn.log" }
 set_default(:unicorn_workers, 2)
 
 namespace :unicorn do
+  after "deploy:setup", "unicorn:setup"
   desc "Setup Unicorn initializer and app configuration"
   task :setup, roles: :app do
     run "mkdir -p #{shared_path}/config"
@@ -15,13 +16,12 @@ namespace :unicorn do
     run "#{sudo} mv /tmp/unicorn_init /etc/init.d/unicorn_#{application}"
     run "#{sudo} update-rc.d -f unicorn_#{application} defaults"
   end
-  after "deploy:setup", "unicorn:setup"
 
   %w[start stop restart].each do |command|
-    desc "#{command} unicorn"
+    after "deploy:#{command}", "unicorn:#{command}"
+    desc "#{command.capitalize} unicorn"
     task command, roles: :app do
       run "service unicorn_#{application} #{command}"
     end
-    after "deploy:#{command}", "unicorn:#{command}"
   end
 end

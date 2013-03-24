@@ -7,7 +7,7 @@ set_default(:mongodb_password) { Capistrano::CLI.password_prompt "MongoDB Passwo
 
 namespace :mongodb do
   after "deploy:install", "mongodb:install"
-  desc "Install the latest stable release of Redis."
+  desc "Install the latest stable release of MongoDB."
   task :install, roles: :db, only: {primary: true} do
     run "#{sudo} add-apt-repository 'deb http://downloads-distro.mongodb.org/repo/ubuntu-upstart dist 10gen'"
     run "#{sudo} apt-key adv --keyserver keyserver.ubuntu.com --recv 7F0CEB10"
@@ -36,12 +36,17 @@ namespace :mongodb do
   end
 end
 
-# Removes default migration tasks
+# This hook removes default migration tasks, because mongoDB don't use it
 namespace :deploy do
+  # Removes deploy:cold callback
+  callback = callbacks[:after].find{|c| c.source == "deploy:migrate" }
+  callbacks[:after].delete(callback)
+  # Rewrites migrate task to logger text
   task :migrate, roles: :db  do
-    logger.info "Skipping migration because mongoDB don't need it"
+    logger.info "deploy:migrate has been removed. Check config/recipes/mongodb.rb for details"
   end
+  # Rewrites migrations task to logger text
   task :migrations, roles: :db  do
-    logger.info "Skipping migration because mongoDB don't need it"
+    logger.info "deploy:migrations task has been removed. Check config/recipes/mongodb.rb for details"
   end
 end
