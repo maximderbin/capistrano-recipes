@@ -1,0 +1,12 @@
+production:
+  database: <%= application %>
+  host: localhost
+  port: 27017
+  pool_size: 5
+  username: <%= user %>
+  password: <%= mongodb_password %>
+  # slaves:
+  #   - host: slave1.local
+  #     port: 27018
+  #   - host: slave2.local
+  #     port: 27019
