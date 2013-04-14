@@ -1,12 +1,25 @@
-production:
-  database: <%= application %>
-  host: localhost
-  port: 27017
-  pool_size: 5
-  username: <%= user %>
-  password: <%= mongodb_password %>
-  # slaves:
-  #   - host: slave1.local
-  #     port: 27018
-  #   - host: slave2.local
-  #     port: 27019
+<%= rails_env %>:
+  # Configure available database sessions. (required)
+  sessions:
+    # Defines the default session. (required)
+    default:
+      # Defines the name of the default database that Mongoid can connect to.
+      # (required).
+      database: <%= mongodb_database %>
+      # Provides the hosts the default session can connect to. Must be an array
+      # of host:port pairs. (required)
+      hosts:
+        - <%= mongodb_host %>
+      username: <%= mongodb_user %>
+      password: <%= mongodb_password %>
+      options:
+        # Change whether the session persists in safe mode by default.
+        # (default: false)
+        # safe: false
+
+        # Change the default consistency model to :eventual or :strong.
+        # :eventual will send reads to secondaries, :strong sends everything
+        # to master. (default: :eventual)
+        consistency: :strong
+  # Configure Mongoid specific options. (optional)
+  options:

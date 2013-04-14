@@ -3,6 +3,9 @@
 # you can either use Capistrano to restart the MongoDB server with `cap mongodb:restart`
 # or on the server through SSH with `service mongodb restart`.
 
+set_default(:mongodb_host) { "localhost:27017" }
+set_default(:mongodb_user) { application }
+set_default(:mongodb_database) { "#{application}_#{rails_env}" }
 set_default(:mongodb_password) { Capistrano::CLI.password_prompt "MongoDB Password: " }
 
 namespace :mongodb do
@@ -33,20 +36,5 @@ namespace :mongodb do
     task command do
       run "#{sudo} service mongodb #{command}"
     end
-  end
-end
-
-# This hook removes default migration tasks, because mongoDB don't use it
-namespace :deploy do
-  # Removes deploy:cold callback
-  callback = callbacks[:after].find{|c| c.source == "deploy:migrate" }
-  callbacks[:after].delete(callback)
-  # Rewrites migrate task to logger text
-  task :migrate, roles: :db  do
-    logger.info "deploy:migrate has been removed. Check config/recipes/mongodb.rb for details"
-  end
-  # Rewrites migrations task to logger text
-  task :migrations, roles: :db  do
-    logger.info "deploy:migrations task has been removed. Check config/recipes/mongodb.rb for details"
   end
 end
