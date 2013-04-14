@@ -7,6 +7,6 @@ namespace :log do
 
   desc "Stream (tail) the Unicorn log."
   task :unicorn do
-    stream "tail -f '/home/#{shared_path}/log/unicorn.log'"
+    stream "tail -f '#{shared_path}/log/unicorn.log'"
   end
 end
