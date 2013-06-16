@@ -1,6 +1,8 @@
+require "rvm/capistrano"
 require 'bundler/capistrano'
 require 'capistrano_colors'
 
+# Load recipes that you need
 %w[base nodejs nginx unicorn assets mongodb check log callbacks].each do |recipe|
   load "config/recipes/#{recipe}"
 end
@@ -14,6 +16,10 @@ set :user,        "user"
 set :application, "appname"
 set :deploy_to,   "/home/#{user}/#{application}"
 set :use_sudo,    false
+
+# RVM settings
+set :rvm_type, :user # user's rvm
+set :rvm_ruby_string, "2.0.0@#{ application }_#{ rails_env }"
 
 # Repository (if any) configuration.
 set :scm,         :git
