@@ -11,7 +11,7 @@ namespace :deploy do
     task :precompile, roles: :web, except: { no_release: true } do
       # Fails here at first-time deploy because of current/REVISION absence
       from = source.next_revision(current_revision) rescue nil
-      if from.nil? || capture("cd #{latest_release} && #{source.local.log(from)} #{files_to_check} | wc -l").to_i > 0
+      if from.nil? or capture("cd #{latest_release} && #{source.local.log(from)} #{files_to_check} | wc -l").to_i > 0
         precompile_locally
       else
         logger.info "Skipping asset pre-compilation because there were no asset changes"
@@ -24,7 +24,7 @@ namespace :deploy do
       find_servers_for_task(current_task).each do |server|
         run_locally "rsync -vr --exclude='.DS_Store' public/assets #{user}@#{server.host}:#{shared_path}/"
       end
-      run_locally "rake assets:clean"
+      run_locally "rm -rf public/assets"
     end
   end
 end
